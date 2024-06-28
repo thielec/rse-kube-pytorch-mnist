@@ -99,6 +99,12 @@ def main():
         default=False,
         help="quickly check a single pass",
     )
+    parser.add_argument(
+        "--local-model",
+        action="store_true",
+        default=False,
+        help="Do not load remote model from URL",
+    )
     args = parser.parse_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     use_mps = not args.no_mps and torch.backends.mps.is_available()
@@ -123,7 +129,13 @@ def main():
     test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
     model = Net().to(device)
-    model.load_state_dict(torch.load("mnist_cnn.pt", map_location=device))
+    if args.local_model:
+        # local model
+        model.load_state_dict(torch.load("mnist_cnn.pt", map_location=device))
+    else:
+        # remote  model
+        model.load_state_dict(torch.utils.model_zoo.load_url("https://rsekube.nrp-nautilus.io/mnist_cnn.pt", model_dir=".", map_location=device))
+
     test(model, device, test_loader)
 
 
