@@ -13,7 +13,8 @@ spec:
                 git clone https://github.com/thielec/rse-kube-pytorch-mnist.git project; cd project;
                 pip install -r requirements.txt;
                 python train.py --save-model;
-                mv mnist_cnn.pt /output"]
+                mv mnist_cnn.pt /output;
+                chmod 777 /output/mnist_cnn.pt;"]
         volumeMounts:
         - mountPath: /output
           name: rsekubevol
