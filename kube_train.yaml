@@ -9,12 +9,14 @@ spec:
       - name: gpu-container
         image: gitlab-registry.nrp-nautilus.io/zihaozhou/nautilus_tutorial:jupyterhub
         command: ["/bin/bash","-c"]
-        args: ["git clone https://github.com/thielec/rse-kube-pytorch-mnist.git project; cd project;
+        args: ["echo 'Job started' >> /output/log.txt;
+                git clone https://github.com/thielec/rse-kube-pytorch-mnist.git project; cd project;
+                pip install -r requirements.txt;
                 python train.py --save-model;
                 mv mnist_cnn.pt /output"]
         volumeMounts:
         - mountPath: /output
-          name: mnist-test-volume
+          name: rsekubevol
         resources:
           limits:
             nvidia.com/gpu: "1"
@@ -26,6 +28,6 @@ spec:
             cpu: "4"
       restartPolicy: Never
       volumes:
-        - name: mnist-test-volume
+        - name: rsekubevol
           persistentVolumeClaim:
-            claimName: mnist-test-volume
+            claimName: rsekubevol

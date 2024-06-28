@@ -137,9 +137,14 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        # torch.save(model.state_dict(), "mnist_cnn.pt") # save state_dict instead of model
-        torch.save(model, "mnist_cnn.pt") # save model
+        torch.save(model.state_dict(), "mnist_cnn.pt") # save state_dict instead of model
+        # torch.save(model, "mnist_cnn.pt") # save model
+    
 
 
 if __name__ == '__main__':
+    with open('/output/log.txt', 'a+') as f:
+        f.write('Training started\n')
     main()
+    with open('/output/log.txt', 'a+') as f:
+        f.write('Training complete\n')
